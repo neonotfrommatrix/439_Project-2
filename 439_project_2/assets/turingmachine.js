@@ -2,7 +2,7 @@
 
 // how to use turing machine functions:
 // tm.moveTape('right');
-// let a = tm.readHead;
+// let a = tm.readHead();
 // if (a == 0) tm.writeHead(1);
 
 const rowSize = 41;

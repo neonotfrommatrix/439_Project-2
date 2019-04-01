@@ -23,22 +23,22 @@ const tm = { // turing machine
     moveTape (direction) {
         switch(direction) {
             case 'left':
-                if(tm.head.x >= 0) {
-                    tm.head.x = 1;
+                if(tm.head.x > 0) {
+                    tm.head.x -= 1;
                 }
                 break;
             case 'right':
-                if(tm.head.x <= tm.tape.length) {
+                if(tm.head.x < tm.tape.length) {
                     tm.head.x += 1;
                 }
                 break;
             case 'up':
-                if(tm.head.y >= 0) {
+                if(tm.head.y > 0) {
                     tm.head.y -= 1;
                 }
                 break;
             case 'down':
-                if(tm.head.y <= tm.tape[0].length) {
+                if(tm.head.y < tm.tape[0].length) {
                     tm.head.x += 1;
                 }
                 break;

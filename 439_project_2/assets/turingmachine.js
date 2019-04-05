@@ -1,56 +1,119 @@
 // this can either be copied into the main js code or referenced using another <script> tag
 
 // how to use turing machine functions:
+// const tm = TuringMachine();
 // tm.moveTape('right');
 // let a = tm.readHead;
 // if (a == 0) tm.writeHead(1);
 
-const rowSize = 41;
-const colSize = 20;
+// "use strict";
+
+// babel compiler stuff
+function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 // tape = 2d array of size 41 x 20
-const tape = new Array(rowSize);
-for (let i=0; i < 41; i++) {
-    tm.tape[i]=new Array(colSize);
+function newTape(rowSize, colSize) {
+	let tape = new Array(rowSize);
+	for (let i=0; i < 41; i++) {
+		tape[i]=new Array(colSize);
+	}
+	return tape;
 }
 
-const tm = { // turing machine
-    head: {
-        x: 0,
-        y: 0
-    },
-    tape: tape,
-    moveTape (direction) {
-        switch(direction) {
-            case 'left':
-                if(tm.head.x > 0) {
-                    tm.head.x -= 1;
-                }
-                break;
-            case 'right':
-                if(tm.head.x < tm.tape.length) {
-                    tm.head.x += 1;
-                }
-                break;
-            case 'up':
-                if(tm.head.y > 0) {
-                    tm.head.y -= 1;
-                }
-                break;
-            case 'down':
-                if(tm.head.y < tm.tape[0].length) {
-                    tm.head.x += 1;
-                }
-                break;
-        }
-    },
-    writeHead(num) {
-        tm.tape[tm.head.x][tm.head.y] = num;
-    },
-    readHead() {
-        return tm.tape[tm.head.x][tm.head.y];
-    }
-}; 
+const TuringMachine = function TuringMachine(rows, cols) {
+  _classCallCheck(this, TuringMachine);
+
+  this.head = {
+    x: 0,
+    y: 0
+  };
+  this.tape = newTape(rows, cols);
+	this.rows = rows;
+	this.cols = cols;
+	
+
+//   return this;
+};
+
+TuringMachine.prototype.exampleFunction = function() {
+	// console.log(this.head);
+}
+
+TuringMachine.prototype.moveTape = function (direction) {
+	let success = false;
+	let prevPosition = {
+		x: this.head.x,
+		y: this.head.y
+	};
+	// console.log(this.head);
+
+    switch (direction) {
+      case 'left':
+        if (this.head.x > 0) {
+          this.head.x -= 1;
+				}
+				else {
+					console.log('stop');
+				}
+
+        break;
+ 
+      case 'right':
+        if (this.head.x < this.tape.length) {
+					this.head.x += 1;
+				}
+				else {
+					console.log('stop');
+				}
+
+        break;
+
+      case 'up':
+        if (this.head.y > 0) {
+          this.head.y -= 1;
+				}
+				else {
+					console.log('stop');
+				}
+
+        break;
+
+      case 'down':
+        if (this.head.y < this.tape[0].length) {
+          this.head.y += 1;
+				}
+				else {
+					console.log('stop');
+				}
+
+        break;
+    }	
+
+		if(!(this.rows == 3 && this.cols == 1)) {
+			// console.log("(".concat(this.head.x, ", ").concat(this.head.y, ")"));
+		}
+		success = !(this.head.x == prevPosition.x && this.head.y == prevPosition.y);
+		console.log(success);
+    return success;
+  };
+
+  TuringMachine.prototype.writeHead = function (num) {
+    this.tape[this.head.y][this.head.x] = num;
+  };
+
+  TuringMachine.prototype.readHead = function () {
+    // console.log(this.head.x);
+    return this.tape[this.head.y][this.head.x];
+  };
+
+  TuringMachine.prototype.getHeadCoords = function () {
+    return new Object({
+      x: this.head.x,
+      y: this.head.y
+    });
+  };
 
 
 

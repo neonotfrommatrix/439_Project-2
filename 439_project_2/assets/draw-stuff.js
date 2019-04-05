@@ -1,17 +1,38 @@
 // Draw stuff
 // Time-stamp: <2019-01-21 20:08:33 Chuck Siska>
 // ------------------------------------------------------------
+function repeat(times, fn) {
+    for(let i = 0; i < times; i++) {
+        fn();
+    }
+}
 
-function rule_150(lastRowCells) {
+function rule_150(temp) {
     // will return true if lastRowCells == [1, 1, 1], [1, 0, 0], [0, 1, 0], [0, 0, 1].
-    if(lastRowCells[0] == 1) {
-        return ((lastRowCells[1] == 1 && lastRowCells[2] == 1) ||
-         (lastRowCells[1] == 0 && lastRowCells[2] == 0));
+    let result = 0;
+    while(temp.getHeadCoords().x != 0) {
+        temp.moveTape('left');
     }
-    else {
-        return ((lastRowCells[1] == 1 && lastRowCells[2] == 0) ||
-                (lastRowCells[1] == 0 && lastRowCells[2] == 1));
+
+    if(temp.readHead() == 1) {
+        result += 4;
     }
+    temp.moveTape('right');
+    if(temp.readHead() == 1) {
+        result += 2;
+    }
+    temp.moveTape('right');
+    if(temp.readHead() == 1) {
+        result += 1;
+    }
+
+    while(temp.getHeadCoords().x != 0) {
+        temp.moveTape('left');
+    }
+
+    console.log(`result = ${result}`);
+    return (result == 7 || result == 4 || result == 2 || result == 1);
+    // return true; 
 }
 
 // FUN. Draw filled rect.
@@ -68,8 +89,10 @@ function fill_cells (ctx, cells) {
     ctx.fillStyle = 'DimGray';
 
     cells.forEach((row, rowIndex) => {
-        row.forEach(col => {
-            ctx.fillRect(col * cell_length, rowIndex * cell_length, cell_length, cell_length);
+        row.forEach((col, colIndex) => {
+            if(col == 1) {
+                ctx.fillRect(colIndex * cell_length, rowIndex * cell_length, cell_length, cell_length);
+            }
         })
     })
 
@@ -80,43 +103,62 @@ function cella_rule_150(ctx) {
     const rowSize = 41;
     const colSize = 20;
 
-    var myarray=new Array(rowSize);
+    // debugger;
 
-    for (i=0; i < 41; i++)
-    {
-      myarray[i]=new Array(colSize);
-    }
+    
 
+    const tm = new TuringMachine(rowSize, colSize);
+    const temp = new TuringMachine(3, 1);
 
+    tm.exampleFunction();
+    // fill center cell in top row
+    repeat(rowSize / 2, function() { tm.moveTape('right') });
+    tm.writeHead(1);
+    repeat(rowSize / 2, function() { tm.moveTape('left') });
+    tm.moveTape('down');
 
-    const grid = myarray; // 2d array of all cells 41*20
-    let lastRow, lastRowCells = [];
-
-    // row iteration
-    grid.forEach((row, i) => {
-        if(i == 0) {
-            row.push(colSize - 1); // this will fill the 20th column of the first row, assuming 41 * 20 gridSize
-        }
-        else {
-            // column iteration
-            for(let col = 0; col < colSize; col++) {
-                lastRow = grid[i - 1];
-                // console.log(lastRow);
-
-                lastRowCells = [
-                    (lastRow.indexOf(col - 1) !== -1)  ? 1 : 0,
-                    (lastRow.indexOf(col) !== -1)  ? 1 : 0,
-                    (lastRow.indexOf(col + 1) !== -1)  ? 1 : 0
-                ];
-
-                // console.log(`${i},${col}: [${lastRowCells[0]}, ${lastRowCells[1]}, ${lastRowCells[2]}]`);
-                if(rule_150(lastRowCells)) {
-                    // console.log(col);
-                    row.push(col);
-                }
+    do { // row iteration
+        do { // col iteration
+            console.log(`Calculating (${tm.getHeadCoords().x}, ${tm.getHeadCoords().y})`);
+            tm.moveTape('up');
+    
+            // first digit
+            if(tm.moveTape('left')) {
+                temp.writeHead(tm.readHead());
+                tm.moveTape('right');
             }
+            else {
+                temp.writeHead(0);
+            }
+            temp.moveTape('right');
+            
+            // second digit
+            temp.writeHead(tm.readHead());
+            temp.moveTape('right');
+            
+            // third digit
+            if(tm.moveTape('right')) {
+                temp.writeHead(tm.readHead());
+                tm.moveTape('left');
+            }
+            else {
+                temp.writeHead(0);
+            }
+            
+            tm.moveTape('down');
+    
+            tm.writeHead(rule_150(temp) ? 1 : 0);
+            console.log('.');        
+            
         }
-    });
+        while(tm.moveTape('right')); // will continue until reaches bound
 
-    fill_cells(ctx, grid);
+        while(tm.getHeadCoords().x > 0) {
+            tm.moveTape('left');
+        }
+    }
+    while(tm.moveTape('down'));
+    
+
+    fill_cells(ctx, tm.tape);
 }

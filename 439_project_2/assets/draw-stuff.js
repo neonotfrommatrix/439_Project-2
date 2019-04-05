@@ -8,7 +8,6 @@ function repeat(times, fn) {
 }
 
 function rule_150(temp) {
-    // will return true if lastRowCells == [1, 1, 1], [1, 0, 0], [0, 1, 0], [0, 0, 1].
     let result = 0;
     while(temp.getHeadCoords().x != 0) {
         temp.moveTape('left');
@@ -30,9 +29,7 @@ function rule_150(temp) {
         temp.moveTape('left');
     }
 
-    console.log(`result = ${result}`);
     return (result == 7 || result == 4 || result == 2 || result == 1);
-    // return true; 
 }
 
 // FUN. Draw filled rect.
@@ -110,16 +107,15 @@ function cella_rule_150(ctx) {
     const tm = new TuringMachine(rowSize, colSize);
     const temp = new TuringMachine(3, 1);
 
-    tm.exampleFunction();
     // fill center cell in top row
-    repeat(rowSize / 2, function() { tm.moveTape('right') });
+    repeat((rowSize / 2) - 1, function() { tm.moveTape('right') });
     tm.writeHead(1);
-    repeat(rowSize / 2, function() { tm.moveTape('left') });
+    repeat((rowSize / 2) - 1, function() { tm.moveTape('left') });
     tm.moveTape('down');
 
     do { // row iteration
         do { // col iteration
-            console.log(`Calculating (${tm.getHeadCoords().x}, ${tm.getHeadCoords().y})`);
+            // console.log(`Calculating (${tm.getHeadCoords().x}, ${tm.getHeadCoords().y})`);
             tm.moveTape('up');
     
             // first digit
@@ -148,12 +144,10 @@ function cella_rule_150(ctx) {
             tm.moveTape('down');
     
             tm.writeHead(rule_150(temp) ? 1 : 0);
-            console.log('.');        
-            
         }
         while(tm.moveTape('right')); // will continue until reaches bound
 
-        while(tm.getHeadCoords().x > 0) {
+        while(tm.getHeadCoords().x > 0) { // moves tape back to start of row
             tm.moveTape('left');
         }
     }

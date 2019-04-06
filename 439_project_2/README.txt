@@ -1,8 +1,28 @@
-READNE: Notes on an HTML + CSS + JS example
-Time-stamp: <2019-02-03 20:31:18 Chuck Siska>
-------------------------------------------------------------
+- Class #: 439
+- Project #2 TM Cella Rule 150
+- Team Name: EJS; Elias Jackson, Natalie Ottolia, Jeremy Gibbons, Sina Heydarmolaei 
 
-How to handle the JS-1 files to get results:
+- Intro: This program  uses logic similar to a TM to computer the cellular automata rule 150.
+
+- Contents:
+  - assets folder containing:
+     draw-stuff.js
+     styles.css
+     turingmachine.js
+  - README.txt
+  - 439-p2-TM-cella-150.pdf
+  - js-2.html
+  
+  
+  - External Requirements: None
+  
+  - Setup and Installation (if any)
+  
+  - Sample invocation: Cellular automata rule 150
+  
+  - Bugs (if any): None
+
+How to handle the JS-2 files to get results:
 
 1. Main HTML file is js-1.html, a web page.
 2. Sibling folder (at same level as .html) is "assets".
@@ -18,3 +38,6 @@ How to show (and run) the web page:
 
 (*) Key: use fcn key F12 to open a "javascript console" in your browser
 and see what might be going wrong: errors and warnings.
+
+-------------------------------------------------------------------
+
